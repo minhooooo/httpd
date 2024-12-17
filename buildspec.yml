@@ -1,24 +1,19 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      docker: 20
-    commands:
-      - echo Installing dependencies...
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $EXISTING_ECR_URI
   build:
     commands:
-      - echo Building the Docker image with custom index.html...
+      - echo Building the Docker image...
       - mkdir -p ./docker-build
-      - cp ./index.html ./docker-build/  
+      - cp ./index.html ./docker-build/
       - echo -e "FROM httpd:latest\nCOPY ./index.html /usr/local/apache2/htdocs/" > ./docker-build/Dockerfile
-      - docker build -t $EXISTING_ECR_URI:latest ./docker-build 
+      - docker build -t $EXISTING_ECR_URI:latest ./docker-build
   post_build:
     commands:
-      - echo Pushing the Docker image to Amazon ECR...
+      - echo Pushing the Docker image to ECR...
       - docker push $EXISTING_ECR_URI:latest
       - echo Build and push completed successfully.
