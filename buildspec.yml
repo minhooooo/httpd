@@ -1,9 +1,6 @@
 version: 0.2
 
 phases:
-  install:
-    commands:
-      - echo Installing dependencies...
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
@@ -13,7 +10,8 @@ phases:
       - echo Building the Docker image...
       - mkdir -p ./docker-build
       - cp ./index.html ./docker-build/
-      - echo -e "FROM httpd:latest\nCOPY ./index.html /usr/local/apache2/htdocs/" > ./docker-build/Dockerfile
+      - echo "FROM httpd:latest" > ./docker-build/Dockerfile
+      - echo "COPY ./index.html /usr/local/apache2/htdocs/" >> ./docker-build/Dockerfile
       - docker build -t $EXISTING_ECR_URI:latest ./docker-build
   post_build:
     commands:
