@@ -13,8 +13,12 @@ phases:
       - echo "FROM httpd:latest" > ./docker-build/Dockerfile
       - echo "COPY ./index.html /usr/local/apache2/htdocs/" >> ./docker-build/Dockerfile
       - docker build -t $EXISTING_ECR_URI:latest ./docker-build
+      - docker push $EXISTING_ECR_URI:latest
   post_build:
     commands:
-      - echo Pushing the Docker image to ECR...
-      - docker push $EXISTING_ECR_URI:latest
+      - echo Writing image definitions file...
+      - printf '[{"name":"httpd-container","imageUri":"%s"}]' $EXISTING_ECR_URI:latest > imagedefinitions.json
       - echo Build and push completed successfully.
+artifacts:
+  files:
+    - imagedefinitions.json
