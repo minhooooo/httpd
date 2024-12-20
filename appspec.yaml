@@ -3,7 +3,7 @@ Resources:
   - TargetService:
       Type: AWS::ECS::Service
       Properties:
-        TaskDefinition: "arn:aws:ecs:ap-northeast-2:713881821833:task-definition/ecs-pipe-task:1"
+        TaskDefinition: "arn:aws:ecs:ap-northeast-2:713881821833:task-definition/stack-deploy-task:1"
         LoadBalancerInfo:
           ContainerName: "httpd-container"
           ContainerPort: 80
